@@ -263,3 +263,5 @@ paket-files/
 __pycache__/
 *.pyc
 output.docx
+
+/output/
