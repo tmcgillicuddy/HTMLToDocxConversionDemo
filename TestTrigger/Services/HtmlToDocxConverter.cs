@@ -1,7 +1,7 @@
 using System.IO;
 using Spire.Doc;
 
-namespace BG.Services
+namespace BG.TestTrigger
 {
     public class HtmlToDocxConverter
     {
