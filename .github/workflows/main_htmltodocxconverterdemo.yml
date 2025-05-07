@@ -35,6 +35,13 @@ jobs:
           dotnet build HTMLToDocxConversionDemo.csproj --configuration Release
           dotnet publish HTMLToDocxConversionDemo.csproj --configuration Release --output ./output
           popd
+  
+        # New step to create the zip package
+      - name: 'Create deployment package'
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          zip -r released-package.zip ./*
+          popd
 
       - name: Login to Azure
         uses: azure/login@v2
