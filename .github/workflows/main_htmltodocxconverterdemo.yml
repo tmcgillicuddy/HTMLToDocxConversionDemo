@@ -43,6 +43,7 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8B30F0B5E29F43D5A4A25118385ABF77 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A1D4B957B4A240D1A566333157BB16A9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4CB0472F65C742708E74F1A0B075A374 }}
+          enable-AzPSSession: true
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
