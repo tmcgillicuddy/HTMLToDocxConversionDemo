@@ -10,15 +10,15 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '8.0.x' # set this to the dotnet version to use
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # Path to your web app project
+  DOTNET_VERSION: '8.0.x' # .NET version to use
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write # Required for OIDC token
+      contents: read # Required for actions/checkout
 
     steps:
       - name: 'Checkout GitHub Action'
@@ -30,24 +30,21 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: 'Resolve Project Dependencies Using Dotnet'
-        shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet build HTMLToDocxConversionDemo.csproj --configuration Release
           dotnet publish HTMLToDocxConversionDemo.csproj --configuration Release --output ./output
           popd
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8B30F0B5E29F43D5A4A25118385ABF77 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A1D4B957B4A240D1A566333157BB16A9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4CB0472F65C742708E74F1A0B075A374 }}
-          enable-AzPSSession: true
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
-        id: fa
         with:
           app-name: 'HTMLToDocxConverterDemo'
           slot-name: 'Production'
